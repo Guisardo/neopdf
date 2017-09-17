@@ -64,7 +64,7 @@ class PDFVoucher extends HTML2PDF {
             $this->html .= "<table class='responsive-table table-header'>";
             $this->html .= "<tr><td style='width: 3%;'></td>";
             $this->html .= "<td style='width: 27%;'>";
-            if (file_exists($logo_path)) {
+            if ($logo_path != '') {
                 $this->html .= "<img class='logo' src='" . $logo_path . "' alt='logo'>";
             }
             $this->html .= "</td>";
@@ -91,7 +91,7 @@ class PDFVoucher extends HTML2PDF {
 
             $this->html .= "<table class='responsive-table table-header'>";
             $this->html .= "<tr>";
-            $this->html .= "<td style='width:50%;'>Raz&oacute;n social: " . strtoupper($this->config["TRADE_SOCIAL_REASON"]) . "</td>";
+            $this->html .= "<td style='width:50%;'>Raz&oacute;n social: " . mb_strtoupper($this->config["TRADE_SOCIAL_REASON"], 'UTF-8') . "</td>";
             $this->html .= "<td class='right-text' style='width:49%;'>CUIT: " . $this->config["TRADE_CUIT"] . "</td>";
             $this->html .= "</tr>";
             $this->html .= "<tr>";
@@ -119,7 +119,7 @@ class PDFVoucher extends HTML2PDF {
             $this->html .= "<tr>";
             $text = $this->voucher["TipoDocumento"] . ": " . $this->voucher["numeroDocumento"];
             $this->html .= "<td style='width:50%;'>" . $text . "</td>";
-            $text = "Apellido y Nombre / Raz&oacute;n Social: " . strtoupper($this->voucher["nombreCliente"]);
+            $text = "Apellido y Nombre / Raz&oacute;n Social: " . mb_strtoupper($this->voucher["nombreCliente"], 'UTF-8');
             $this->html .= "<td class='right-text' style='width:49%;'>" . $text . "</td>";
             $this->html .= "</tr>";
             $this->html .= "<tr>";
@@ -193,12 +193,9 @@ class PDFVoucher extends HTML2PDF {
     function fill_B() {
         $this->html .= "<tr>";
         $this->html .= "<th class='center-text' style='width=10%;'>C&oacute;digo</th>";
-        $this->html .= "<th style='width=30%;'>Producto / Servicio</th>";
+        $this->html .= "<th style='width=60%;'>Producto / Servicio</th>";
         $this->html .= "<th class='right-text' style='width=10%;'>Cantidad</th>";
-        $this->html .= "<th style='width=10%;'>U. Medida</th>";
         $this->html .= "<th class='right-text' style='width=10%;'>Precio unit.</th>";
-        $this->html .= "<th class='right-text' style='width=10%;'>% Bonif</th>";
-        $this->html .= "<th class='right-text' style='width=10%;'>Imp. Bonif.</th>";
         $this->html .= "<th class='right-text' style='width=10%;'>Subtotal</th>";
         $this->html .= "</tr>";
         foreach ($this->voucher["items"] as $item) {
@@ -208,12 +205,9 @@ class PDFVoucher extends HTML2PDF {
             } else {
                 $this->html .= "<td class='center-text' style='width=10%;'>" . $item["codigo"] . "</td>";
             }
-            $this->html .= "<td style='width=30%;'>" . $item["descripcion"] . "</td>";
-            $this->html .= "<td class='right-text' style='width=10%;'>" . number_format($item["cantidad"], 3) . "</td>";
-            $this->html .= "<td style='width=10%;'>" . $item["UnidadMedida"] . "</td>";
+            $this->html .= "<td style='width=60%;'>" . $item["descripcion"] . "</td>";
+            $this->html .= "<td class='right-text' style='width=10%;'>" . $item["cantidad"] . "</td>";
             $this->html .= "<td class='right-text' style='width=10%;'>" . number_format($item["precioUnitario"], 2) . "</td>";
-            $this->html .= "<td class='right-text' style='width=10%;'>" . number_format($item["porcBonif"], 2) . "</td>";
-            $this->html .= "<td class='right-text' style='width=10%;'>" . number_format($item["impBonif"], 2) . "</td>";
             $this->html .= "<td class='right-text' style='width=10%;'>" . number_format($item["importeItem"], 2) . "</td>";
             $this->html .= "</tr>";
         }
@@ -344,16 +338,6 @@ class PDFVoucher extends HTML2PDF {
      */
     private function total_line_B() {
         $this->html .= '    <table class="responsive-table">';
-        $this->html .= '        <tr>';
-        $this->html .= '		<td class="right-text" style="width: 75%;">Subtotal: $ </td>';
-        $text = number_format((float) round($this->voucher["importeTotal"], 2), 2, '.', '');
-        $this->html .= '		<td class="right-text" style="width: 25%;">' . $text . '</td>';
-        $this->html .= '        </tr>';
-        $this->html .= '        <tr>';
-        $this->html .= '		<td class="right-text" style="width: 75%;">Importe otros tributos: $ </td>';
-        $text = number_format((float) round($this->voucher["importeOtrosTributos"], 2), 2, '.', '');
-        $this->html .= '		<td class="right-text" style="width: 25%;">' . $text . '</td>';
-        $this->html .= '        </tr>';
         $this->html .= '        <tr>';
         $this->html .= '		<td class="right-text" style="width: 75%;">Importe Total: $ </td>';
         $text = number_format((float) round($this->voucher["importeTotal"], 2), 2, '.', '');
