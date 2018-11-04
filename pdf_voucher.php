@@ -117,7 +117,7 @@ class PDFVoucher extends HTML2PDF {
             $this->html .= "<div class='border-div'>";
             $this->html .= "<table class='responsive-table table-header'>";
             $this->html .= "<tr>";
-            $text = $this->voucher["TipoDocumento"] . ": " . $this->voucher["numeroDocumento"];
+            $text = isset($this->voucher["TipoDocumento"]) ? $this->voucher["TipoDocumento"] . ": " . $this->voucher["numeroDocumento"] : '';
             $this->html .= "<td style='width:50%;'>" . $text . "</td>";
             $text = "Apellido y Nombre / Raz&oacute;n Social: " . mb_strtoupper($this->voucher["nombreCliente"], 'UTF-8');
             $this->html .= "<td class='right-text' style='width:49%;'>" . $text . "</td>";
