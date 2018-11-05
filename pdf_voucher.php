@@ -116,21 +116,27 @@ class PDFVoucher extends HTML2PDF {
         if ($this->show_element("receiver")) {
             $this->html .= "<div class='border-div'>";
             $this->html .= "<table class='responsive-table table-header'>";
-            $this->html .= "<tr>";
-            $text = isset($this->voucher["TipoDocumento"]) ? $this->voucher["TipoDocumento"] . ": " . $this->voucher["numeroDocumento"] : '';
-            $this->html .= "<td style='width:50%;'>" . $text . "</td>";
+            $this->html .= "<tr class='right-text'>";
+            if (isset($this->voucher["TipoDocumento"])) {
+                $text = $this->voucher["TipoDocumento"] . ": " . $this->voucher["numeroDocumento"];
+                $this->html .= "<td class='right-text'>" . $text . "</td>";
+                $this->html .= "</tr>";
+                $this->html .= "<tr>";
+            }
             $text = "Apellido y Nombre / Raz&oacute;n Social: " . mb_strtoupper($this->voucher["nombreCliente"], 'UTF-8');
-            $this->html .= "<td class='right-text' style='width:49%;'>" . $text . "</td>";
+            $this->html .= "<td class='right-text' style='width:99%;'>" . $text . "</td>";
             $this->html .= "</tr>";
             $this->html .= "<tr>";
             $text = "Condici&oacute;n frente al IVA: " . $this->voucher["tipoResponsable"];
-            $this->html .= "<td style='width:50%;'>" . $text . "</td>";
+            $this->html .= "<td class='right-text'>" . $text . "</td>";
+            $this->html .= "</tr>";
+            $this->html .= "<tr>";
             $text = "Domicilio: " . $this->voucher["domicilioCliente"];
-            $this->html .= "<td class='right-text' style='width:49%;'>" . $text . "</td>";
+            $this->html .= "<td class='right-text'>" . $text . "</td>";
             $this->html .= "</tr>";
             $this->html .= "<tr>";
             $text = "Condici&oacute;nes de venta: " . $this->voucher["CondicionVenta"];
-            $this->html .= "<td style='width:10%;'>" . $text . "</td>";
+            $this->html .= "<td class='right-text'>" . $text . "</td>";
             $this->html .= "</tr>";
             $this->html .= "</table>";
             $this->html .= "</div>";
